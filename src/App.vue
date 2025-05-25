@@ -1,6 +1,20 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { RouterLink, RouterView } from "vue-router";
+import HelloWorld from "./components/HelloWorld.vue";
+
+import { message, notification } from "ant-design-vue";
+import { onMounted } from "vue";
+
+onMounted(() => {
+  message.success("Hello!");
+
+  notification["success"]({
+    message: "message",
+    description: "description",
+  });
+
+  $(".logo").hide();
+});
 </script>
 
 <template>
