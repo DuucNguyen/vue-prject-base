@@ -1,5 +1,5 @@
 import type { Axios } from "axios";
-import { API } from "./api/api";
+import { API } from "./api/Api";
 import jQuery from "jquery";
 
 declare global {

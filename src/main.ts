@@ -5,7 +5,7 @@ import { createPinia } from "pinia";
 import { createPersistedState } from "pinia-plugin-persistedstate";
 
 import App from "./App.vue";
-import router from "./router/router_index";
+import router from "./router/router-index";
 
 /**
  * highchart
@@ -22,7 +22,7 @@ window.$ = $; //register jquery as global
 import axios from "axios";
 window.axios = axios; //register axios as global
 
-import API from "@/api/api";
+import API from "@/api/Api";
 window.api = API; //register api as global
 
 /**
