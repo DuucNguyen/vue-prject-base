@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 export const useAuthStore = defineStore("authStore", {
     state: () => ({
         router: useRouter(),
-        returnURL: null,
+        returnURL: "",
         user_info: localStorageService.GetUserInfo(),
     }),
     actions: {
@@ -31,8 +31,7 @@ export const useAuthStore = defineStore("authStore", {
         },
 
         checkUser() {
-            var data = localStorageService.GetUserInfo();
-            var item = data ? JSON.parse(data) : null;
+            var item = localStorageService.GetUserInfo();;
 
             if (item == null || dayjs().isAfter(item.expiry)) {
                 localStorageService.ClearUserInfo();

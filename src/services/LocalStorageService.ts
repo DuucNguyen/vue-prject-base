@@ -10,7 +10,9 @@ class LocalStorageService {
         localStorage.setItem(LOCAL_USER_INFO, JSON.stringify(item));
     }
     GetUserInfo() {
-        return localStorage.getItem(LOCAL_USER_INFO);
+        var data = localStorage.getItem(LOCAL_USER_INFO);
+        var user_info = data ? JSON.parse(data) : null;
+        return user_info;
     }
     ClearUserInfo() {
         localStorage.removeItem(LOCAL_USER_INFO);
