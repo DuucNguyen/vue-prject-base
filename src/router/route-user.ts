@@ -2,7 +2,14 @@ const userRoutes = [
     {
         path: "/user",
         component: () => import("@/shared/_userLayout.vue"),
-        children: [],
+        children: [
+            {
+                name: "User_Profile",
+                path: "profile",
+                meta: {title: "profile"},
+                component: () => import("@/views/user/profile/profile.vue")
+            },
+        ],
     },
 ];
 

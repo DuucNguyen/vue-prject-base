@@ -4,8 +4,6 @@ import {useAuthStore} from "@/stores/AuthStore";
 import adminRoutes from "./route-admin";
 import userRoutes from "./route-user";
 
-const authStore = useAuthStore();
-
 const indexRoutes = [
     {
         path: "/",
@@ -16,6 +14,25 @@ const indexRoutes = [
         path: "/about",
         name: "about",
         component: () => import("../views/AboutView.vue"),
+    },
+    {
+        path: "/404",
+        name: "404",
+        component: import("@/views/public/404.vue"),
+    },
+    {
+        path: "/login",
+        name: "login",
+        component: () => import("@/views/public/login.vue"),
+    },
+    {
+        path: "/register",
+        name: "register",
+        component: () => import("@/views/public/register.vue"),
+    },
+    {
+        path: "/:pathMatch(.*)*",
+        redirect: "/404",
     },
 ];
 
@@ -43,16 +60,16 @@ router.beforeEach(async (to, from, next) => {
     document.title = "YourApp-" + to.meta.title;
 
     //check authentication + returnURL
-    if (!authStore.checkUser() && !publicRoutes.includes(to.name as string)) {
-        authStore.returnURL = to.fullPath;
-        authStore.logOut();
+    if (!useAuthStore().checkUser() && !publicRoutes.includes(to.name as string)) {
+        useAuthStore().returnURL = to.fullPath;
+        useAuthStore().logOut();
         next({name: "login"});
         return;
     }
 
     //test redirect
-    if (to.name === "login" && authStore.checkUser()) {
-        if (authStore.user_info.claims.includes("Admin_Dashboard_View")) {
+    if (to.name === "login" && useAuthStore().checkUser()) {
+        if (useAuthStore().user_info.claims.includes("Admin_Dashboard_View")) {
             next({name: "Admin_Dashboards_View"});
         } else {
             next({name: "404"});
@@ -83,7 +100,8 @@ router.beforeEach(async (to, from, next) => {
     //filter check claim
     if (isAdminRouteName(to.name)) {
         const claimKey = adminClaimRoutes[to.name];
-        if (authStore.user_info.claims[claimKey] === "1") {
+
+        if (useAuthStore().getUserInfo().claims[claimKey] === "1") {
             next();
         }
         next({name: "404"});

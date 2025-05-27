@@ -4,12 +4,13 @@ import { useAuthStore } from "@/stores/AuthStore";
 import { useRouter } from "vue-router";
 
 const baseURL = import.meta.env.VITE_API_URL_LOCAL;
-const authStore = useAuthStore();
+// const authStore = useAuthStore();
 const router = useRouter();
 
 const instance = axios.create({
     baseURL,
     timeout: 300000,
+    withCredentials: true,
     headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
@@ -36,7 +37,7 @@ instance.interceptors.response.use(
                 try {
                     var renew_token_result = await ApiAuthentication.RenewToken();
                     if (!renew_token_result.data.isSucceeded) {
-                        authStore.logOut();
+                        useAuthStore().logOut();
                     }
                     
                     return instance(originalConfig); //axios execute original request
@@ -57,13 +58,13 @@ instance.interceptors.response.use(
                         break;
                     }
                     case 403: {
-                        router.push("/404");
+                        window.location.assign("/404");
                         break;
                     }
                     default: {
                         //user_info exist but expired
-                        if (!authStore.checkUser()) {
-                            router.push("/login");
+                        if (!useAuthStore().checkUser()) {
+                           window.location.assign("/login");
                         } else {
                             console.log("ERROR: User not found");
                         }

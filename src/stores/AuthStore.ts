@@ -1,9 +1,7 @@
-import { defineStore } from "pinia";
+import {defineStore} from "pinia";
 import apiUser from "@/api/ApiUser";
-import apiAuthentication from "@/api/ApiAuthentication";
 import localStorageService from "@/services/LocalStorageService";
-import { useRouter } from "vue-router";
-import ApiAuthentication from "@/api/ApiAuthentication";
+import {useRouter} from "vue-router";
 import dayjs from "dayjs";
 
 export const useAuthStore = defineStore("authStore", {
@@ -17,9 +15,9 @@ export const useAuthStore = defineStore("authStore", {
         async LoginSuccessful() {
             var user_result = await apiUser.GetUserInfo();
 
-            if (user_result.data.isSucceeded) {
-                this.user_info = user_result.data.data;
-                localStorageService.SetUserInfo(user_result.data.data);
+            if (user_result.data) {
+                this.user_info = user_result.data;
+                localStorageService.SetUserInfo(user_result.data);
                 this.router.push(this.returnURL || "/"); //returnURL or home page
             }
         },
@@ -31,7 +29,7 @@ export const useAuthStore = defineStore("authStore", {
         },
 
         checkUser() {
-            var item = localStorageService.GetUserInfo();;
+            var item = localStorageService.GetUserInfo();
 
             if (item == null || dayjs().isAfter(item.expiry)) {
                 localStorageService.ClearUserInfo();
@@ -41,7 +39,7 @@ export const useAuthStore = defineStore("authStore", {
         },
 
         getUserInfo() {
-            return this.checkUser() ? localStorageService.GetUserInfo() : null;
+            return this.checkUser() ? localStorageService.GetUserInfo().value : null;
         },
 
         setUserInfo(value: object) {

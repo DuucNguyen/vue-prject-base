@@ -25,6 +25,14 @@ window.axios = axios; //register axios as global
 import API from "@/api/Api";
 window.api = API; //register api as global
 
+const app = createApp(App);
+
+const pinia = createPinia();
+pinia.use(createPersistedState());
+
+app.use(pinia);
+app.use(router);
+
 /**
  * ant-design
  * **/
@@ -58,13 +66,6 @@ import {
   Steps,
 } from "ant-design-vue";
 
-const app = createApp(App);
-
-const pinia = createPinia();
-pinia.use(createPersistedState());
-
-app.use(pinia);
-app.use(router);
 
 /**
  * ant-design
