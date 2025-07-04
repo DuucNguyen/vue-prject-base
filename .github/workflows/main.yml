@@ -1,0 +1,40 @@
+name: Deploy Vite Project to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master  
+
+permissions:
+  contents: write
+
+
+env: 
+  VITE_API_URL_PRODUCT: ${{ secrets.VITE_API_URL_PRODUCT }}
+  NODE_ENV: ${{ secrets.NODE_ENV }}
+  VITE_API_URL_LOCAL: ${{ secrets.VITE_API_URL_LOCAL }}
+  
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build-only
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: dist
